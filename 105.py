@@ -42,15 +42,23 @@ def save_weather(weather_report):
 @flow
 def weather_pipeline(lat: float, lon: float):
     logger = get_run_logger()
-    weather = fetch_weather(lat, lon)
-    dewpoint = fetch_dewpoint(lat, lon)
+    try:
+        weather = fetch_weather(lat, lon)
+        dewpoint = fetch_dewpoint(lat, lon)
+    except Exception as e:
+        logger.debug("Weather variable: {} ; dewpoint variable: {}".format(weather, dewpoint))
+        logger.error("ERROR: {}".format(e))
 
     weather_report = {
         "weather": weather,
         "dewpoint": dewpoint
     }
     
-    save_weather(weather_report)
+    try:
+        save_weather(weather_report)
+    except Exception as e:
+        logger.debug("Weather Report: {}".format(weather_report))
+        logger.error("ERROR: {}".format(e))
 
 
 if __name__ == "__main__":

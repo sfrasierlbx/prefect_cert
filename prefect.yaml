@@ -1,0 +1,46 @@
+# Welcome to your prefect.yaml file! You can you this file for storing and managing
+# configuration for deploying your flows. We recommend committing this file to source
+# control along with your flow code.
+
+# Generic metadata about this project
+name: prefect_cert
+prefect-version: 2.11.3
+
+# build section allows you to manage and build docker images
+build:
+
+# push section allows you to manage if and how this project is uploaded to remote locations
+push:
+
+# pull section allows you to provide instructions for cloning this project in remote locations
+pull:
+- prefect.deployments.steps.git_clone:
+    repository: https://github.com/sfrasierlbx/prefect_cert.git
+    branch: main
+    access_token: '{{ prefect.blocks.secret.deployment-open-mateo-weather-pipeline-repo-token
+      }}'
+
+# the deployments section allows you to provide configuration for deploying flows
+deployments:
+- name: open-mateo
+  version:
+  tags: []
+  description:
+  entrypoint: 101.py:weather_pipeline
+  parameters: {}
+  work_pool:
+    name: weather-pool
+    work_queue_name:
+    job_variables: {}
+  schedule:
+- name: open-mateo-subflow
+  version:
+  tags: []
+  description:
+  entrypoint: 105.py:weather_pipeline
+  parameters: {}
+  work_pool:
+    name: weather-pool
+    work_queue_name:
+    job_variables: {}
+  schedule:

@@ -1,3 +1,4 @@
 #### IGNORE FILES ### 
 .venv
 test.py
+__pycache__/
